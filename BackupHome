@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# Author: Cyril GENISSON
+# Created: 30/10/2023
+# Updated: 30/10/2023
+#
+# Nom du script: BackupHome
+# Description: sauvegarde tous les fichiers du répertoire $HOME de chaque
+# utilisateur du système offrant différentes possibilités
+#   fichiers créés depuis moins de 7 jours:     option -7
+#   fichiers modifiés depuis plus de 7 jours:   option +7
+#   répertoire dont le contenu est > 10Mo:      option Mo
+#   répertoires et fichiers cachés: sans option
+# Toutes les sauvegardes sont dans le répertoire /var/backup
+# On suppose que tous les répertoires utilisateurs sont dans le répertoire /home.
+# Dans le cas contraire on aurait dû balayer le fichier /etc/passwd.
+# D'autre part on suppose que les noms des répertoires $HOME sont les mêmes que les
+# noms des utilisateurs.
+
+
+OPT1="fichier-moins-7-jours"
+OPT2="fichier-plus-7-jours"
+OPT3="dossiers-sup-10Mo"
+OPT4="rep-fichiers-caches"
+
+SAVEDIR="/var/backup"
+DATE=$(date +"%d-%b-%Y")
+
+if [ ! -d /var/backup ]; then
+    mkdir /var/backup
+fi
+
+if [ $1 = "-7" ]; then
+    OPTFIND="-type f -ctime -7"
+    FILE=$OPT1-$DATE.tar.gz
+elif [ $1 = "+7" ]; then
+    OPTFIND="-type f -mtime +7"
+    FILE=$OPT2-$DATE.tar.gz
+elif [ $1 = "Mo" ]; then
+    OPTFIND="-type d -size +10M"
+    FILE=$OPT3-$DATE.tar.gz
+elif [ $1 = "all" ]; then
+    OPTFIND='-type d,f -iname "\.*"'
+    FILE=$OPT4-$DATE.tar.gz
+else
+    echo "Utilisation $0 [-7|+7|Mo|all]"
+    exit 1
+fi
+
+for k in $(ls /home); do
+    filename=$k-$FILE
+    find /home/$k $OPT -exec tar -czvf $SAVEDIR/$filename '{}' \;
+    chown $k:$k $SAVEDIR/$k-$FILE
+    chmod 600 $SAVEDIR/$filename
+done
+
+exit 0
