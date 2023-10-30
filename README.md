@@ -31,3 +31,26 @@ données dans d'autres fichiers /var/log/tshark.log.{1..4}.gz
 # Pour aller plus loin
 Deamoniser le job3 de manière à ce que la rotation de logs
 tourne en background dès le démarrage du système.
+
+Pour ce dernier job il suffit de créer un descripteur de service
+dans /etc/systemd/system qui démarrera juste après le réseau du système
+
+```text
+[Unit]
+Description=Service de surveillance réseau
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /usr/local/bin/script-tshark.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Ensuite il nous suffit de définir les permissions du fichier
+à 644 et d'activier le service à l'aide de systemctl:
+```bash
+chmod 644 /etc/systemd/system/tshark.service
+systemctl enable tshark.service --now
+```
