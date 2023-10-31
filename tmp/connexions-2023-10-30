@@ -1,0 +1,5 @@
+Oct 30 10:01:31 DESKTOP-Q6BS7RP systemd-logind[180]: New session c1 of user kaman.
+Oct 30 15:05:50 DESKTOP-Q6BS7RP systemd-logind[180]: New session c2 of user root.
+Oct 30 15:27:48 DESKTOP-Q6BS7RP systemd-logind[180]: New session c3 of user root.
+Oct 30 19:01:56 DESKTOP-Q6BS7RP systemd-logind[180]: New session c1 of user kaman.
+Oct 30 23:57:27 DESKTOP-Q6BS7RP systemd-logind[180]: New session c2 of user root.
