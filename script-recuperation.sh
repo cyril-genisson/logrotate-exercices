@@ -33,7 +33,6 @@ while [ $k != $(inverse $BEFORE) ] ; do
     journalctl --since $k --until $(date -d "$k + 1 days" +"%Y-%m-%d") | grep "New session" > $TEMP/connexions-$k
     k=$(date -d "$k + 1 days" +"%Y-%m-%d")
 done
-journalctl --since $k --until $k | grep "New session" > /tmp/connexions-$k
 
 tar -czvf $SAVE $TEMP/connexions-*
 rm -f $TEMP/connexions-*
