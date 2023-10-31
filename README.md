@@ -49,7 +49,7 @@ WantedBy=multi-user.target
 ```
 
 Ensuite il nous suffit de définir les permissions du fichier
-à 644 et d'activier le service à l'aide de systemctl:
+à 644 et d'activer le service à l'aide de systemctl:
 ```bash
 chmod 644 /etc/systemd/system/tshark.service
 systemctl enable tshark.service --now
